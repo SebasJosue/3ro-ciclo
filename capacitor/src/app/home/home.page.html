@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Geolocalizacion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-button expand="block" (click)="obtenerUbicacion()">
+    Obtener Ubicacion
+  </ion-button>
+
+  <div *ngIf="latitude && longitude">
+    <p><strong>Latitud:</strong>{{ latitude}}</p>
+    <p><strong>Longitud:</strong>{{longitude}}</p>
+  </div>
+  
+</ion-content>
+
+

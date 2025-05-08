@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Diario de Aventuras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-input [(ngModel)]="titulo" placeholder="Título"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-textarea [(ngModel)]="descripcion" placeholder="Descripción"></ion-textarea>
+  </ion-item>
+
+  <ion-button expand="block" (click)="guardarEntrada()">Guardar</ion-button>
+
+  <ion-list>
+    <ion-item *ngFor="let entrada of entradas">
+      <ion-label>
+        <h2>{{ entrada.titulo }}</h2>
+        <p>{{ entrada.descripcion }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

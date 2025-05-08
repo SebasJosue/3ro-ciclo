@@ -1,0 +1,7 @@
+{
+  "name": "PruebaConocimiento",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

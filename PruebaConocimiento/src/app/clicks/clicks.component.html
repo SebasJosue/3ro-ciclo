@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Contador de clicks</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label position="floating">Tu nombre</ion-label>
+    <ion-input [(ngModel)]="nombreTemp" (ionInput)="onNombreChange()" clearInput></ion-input>
+  </ion-item>
+
+  <h2>
+    ¡Bienvenido{{ nombreTemp ? ', ' + nombreTemp : '' }}!
+  </h2>
+
+  <h3>Contador: {{ contador }}</h3>
+
+  <ion-button expand="full" (click)="incrementar()">
+    ¡Haz click!
+  </ion-button>
+
+</ion-content>
