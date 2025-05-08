@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contenido {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  descripcion String
+  anio        Int
+  tipo        String   // "pelicula" o "serie"
+  pelicula    Pelicula?
+  serie       serie?
+}
+
+model Pelicula {
+  id           Int       @id @default(autoincrement())
+  contenidoId  Int       @unique
+  duracion     Int
+  director     String
+  contenido    Contenido @relation(fields: [contenidoId], references: [id])
+}
+
+model serie {
+  id           Int       @id @default(autoincrement())
+  contenidoId  Int       @unique
+  temporadas   Int
+  creador      String
+  contenido    Contenido @relation(fields: [contenidoId], references: [id])
+}
