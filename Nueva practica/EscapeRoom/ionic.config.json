@@ -1,0 +1,7 @@
+{
+  "name": "EscapeRoom",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
