@@ -12,14 +12,20 @@ export class VideojuegoService {
 
   obtenerTodos() {
     return this.prisma.videojuego.findMany({
-      include: { desarrollador: true, resenas: true },
+      include: {
+        desarrollador: true,
+        resenas: true,
+      },
     });
   }
 
   obtenerUno(id: number) {
     return this.prisma.videojuego.findUnique({
       where: { id },
-      include: { desarrollador: true, resenas: true },
+      include: {
+        desarrollador: true,
+        resenas: true,
+      },
     });
   }
 

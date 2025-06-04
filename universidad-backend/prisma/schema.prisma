@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
@@ -23,31 +22,32 @@ model Carrera {
 }
 
 model Materia {
-  id           Int           @id @default(autoincrement())
-  nombre       String
-  carreraId    Int
-  carrera      Carrera       @relation(fields: [carreraId], references: [id])
-  inscripciones Inscripcion[]
-  dictados     Dicta[]
-}
-
-model Estudiante {
   id            Int           @id @default(autoincrement())
   nombre        String
   carreraId     Int
   carrera       Carrera       @relation(fields: [carreraId], references: [id])
   inscripciones Inscripcion[]
+  dictados      Dicta[]
+}
+
+model Estudiante {
+  id            Int       @id @default(autoincrement())
+  nombre        String
+  carreraId     Int
+  carrera       Carrera   @relation(fields: [carreraId], references: [id])
+  inscripciones Inscripcion[]
+  usuario       Usuario?  @relation("EstudianteUsuario")
 }
 
 model Profesor {
-  id         Int     @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   nombre     String
   carreraId  Int
-  carrera    Carrera @relation(fields: [carreraId], references: [id])
+  carrera    Carrera   @relation(fields: [carreraId], references: [id])
   dictados   Dicta[]
+  usuario    Usuario?  @relation("ProfesorUsuario")
 }
 
-// Modelo intermedio: estudiantes <-> materias
 model Inscripcion {
   id           Int        @id @default(autoincrement())
   estudiante   Estudiante @relation(fields: [estudianteId], references: [id])
@@ -58,7 +58,6 @@ model Inscripcion {
   @@unique([estudianteId, materiaId])
 }
 
-// Modelo intermedio: profesores <-> materias
 model Dicta {
   id         Int      @id @default(autoincrement())
   profesor   Profesor @relation(fields: [profesorId], references: [id])
@@ -67,4 +66,75 @@ model Dicta {
   materiaId  Int
 
   @@unique([profesorId, materiaId])
+}
+
+model Usuario {
+  id                Int               @id @default(autoincrement())
+  nombre            String
+  email             String            @unique
+  password          String
+  activo            Boolean           @default(true) // ← Campo agregado para activar/desactivar usuario
+
+  rolId             Int
+  rol               Rol               @relation(fields: [rolId], references: [id])
+
+  estudiante        Estudiante?       @relation("EstudianteUsuario", fields: [estudianteId], references: [id])
+  estudianteId      Int?              @unique
+
+  profesor          Profesor?         @relation("ProfesorUsuario", fields: [profesorId], references: [id])
+  profesorId        Int?              @unique
+
+  profesorCursos    Curso[]           @relation("ProfesorCursos")
+  estudianteCursos  EstudianteCurso[]
+  notas             Nota[]
+}
+
+model Curso {
+  id          Int               @id @default(autoincrement())
+  nombre      String
+  profesorId  Int
+  profesor    Usuario           @relation("ProfesorCursos", fields: [profesorId], references: [id])
+  estudiantes EstudianteCurso[]
+  notas       Nota[]
+  disponible  Boolean           @default(true)
+}
+
+model EstudianteCurso {
+  id           Int     @id @default(autoincrement())
+  estudianteId Int
+  cursoId      Int
+  estudiante   Usuario @relation(fields: [estudianteId], references: [id])
+  curso        Curso   @relation(fields: [cursoId], references: [id])
+}
+
+model Nota {
+  id           Int     @id @default(autoincrement())
+  estudianteId Int
+  cursoId      Int
+  calificacion Float
+  estudiante   Usuario @relation(fields: [estudianteId], references: [id])
+  curso        Curso   @relation(fields: [cursoId], references: [id])
+}
+
+model Rol {
+  id       Int             @id @default(autoincrement())
+  nombre   String          @unique
+  usuarios Usuario[]
+  permisos RolesPermisos[]
+}
+
+model Permiso {
+  id          Int             @id @default(autoincrement())
+  descripcion String          @unique
+  roles       RolesPermisos[]
+}
+
+model RolesPermisos {
+  id        Int     @id @default(autoincrement())
+  rolId     Int
+  permisoId Int
+  rol       Rol     @relation(fields: [rolId], references: [id])
+  permiso   Permiso @relation(fields: [permisoId], references: [id])
+
+  @@unique([rolId, permisoId])
 }

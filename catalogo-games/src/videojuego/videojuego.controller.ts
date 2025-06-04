@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { VideojuegoService } from './videojuego.service';
 
 @Controller('videojuegos')
@@ -16,17 +16,17 @@ export class VideojuegoController {
   }
 
   @Get(':id')
-  obtenerUno(@Param('id', ParseIntPipe) id: number) {
-    return this.videojuegoService.obtenerUno(id);
+  obtenerUno(@Param('id') id: string) {
+    return this.videojuegoService.obtenerUno(+id);
   }
 
   @Put(':id')
-  actualizar(@Param('id', ParseIntPipe) id: number, @Body() data: any) {
-    return this.videojuegoService.actualizar(id, data);
+  actualizar(@Param('id') id: string, @Body() data: any) {
+    return this.videojuegoService.actualizar(+id, data);
   }
 
   @Delete(':id')
-  eliminar(@Param('id', ParseIntPipe) id: number) {
-    return this.videojuegoService.eliminar(id);
+  eliminar(@Param('id') id: string) {
+    return this.videojuegoService.eliminar(+id);
   }
 }
